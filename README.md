@@ -8,10 +8,11 @@ touch .env
 ```
 CONCOURSE_BASIC_AUTH_USERNAME=concourse
 CONCOURSE_BASIC_AUTH_PASSWORD=password
-CONCOURSE_EXTERNAL_URL=http://192.168.33.10:8080
 CONCOURSE_POSTGRES_USER=concourse
 CONCOURSE_POSTGRES_PASSWORD=password
 ```
+## コンテナ起動
+docker-compose up
 
 ## Concourseコマンドのインストール
 
@@ -30,3 +31,6 @@ ln -s ../concourse/fly_darwin_amd64 /usr/local/bin/fly
 
 ## workerの起動
 ./worker-up.sh
+
+## アクセス
+http://127.0.0.1:8080/
