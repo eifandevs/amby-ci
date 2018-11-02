@@ -1,29 +1,105 @@
-version: '3'
+version: '3.2'
 services:
-  jenkins:
-    build: ./jenkins
+  nginx:
+    build: ./nginx
+    container_name: kimochi-nginx
     ports:
-      - 8080:8080
-    volumes:
-      - jenkins-data:/var/jenkins_home
+      - "80:80"
+    depends_on:
+      - jenkins 
+      - portainer
+      - rocketchat
+      - phpldapadmin
     networks:
-      qass_ci_net:
-        ipv4_address: 172.16.238.10
+      - bridge
+
+  ldap:
+    build: ldap
+    container_name: kimochi-ldap
+    ports:
+      - "389:389"
+    environment:
+      - SLAPD_PASSWORD=secret_password
+      - SLAPD_DOMAIN=ldap.service.local
+      - SLAPD_FULL_DOMAIN=dc=ldap,dc=service,dc=local
+    volumes:
+      - ldap-config-data:/etc/ldap
+      - ldap-app-data:/var/lib/ldap
+    networks:
+      - bridge
+
+  phpldapadmin:
+    build: phpldapadmin
+    container_name: kimochi-phpldapadmin
+    ports:
+      - "3003:80"
+    environment:
+      - LDAP_SERVER_HOST=ldap
+    networks:
+      - bridge
+
+  portainer:
+    build: portainer
+    container_name: kimochi-portainer
+    restart: always
+    ports:
+      - "3002:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data
+    networks:
+      - bridge
+      
+  jenkins:
+    build: jenkins
+    container_name: kimochi-jenkins
+    user: root
+    restart: always
+    ports:
+      - 3001:8080
+      - 50000:50000
+    volumes:
+      - ./jenkins/home:/var/jenkins_home
+    environment:
+      - JENKINS_OPTS=--prefix=/jenkins
+      - TZ=Asia/Tokyo
     tty: true
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "10"
+    networks:
+      - bridge
+
+  db:
+    build: rocket.chat/db
+    container_name: kimochi-rocketchat-db
+    restart: always
+    command: --smallfiles
+    volumes:
+      - ./rocket.chat/db/data:/data/db
+    environment:
+      - TZ=Asia/Tokyo
+    tty: true
+    networks:
+      - bridge
+
+  rocketchat:
+    build: rocket.chat/app
+    container_name: kimochi-rocketchat
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - ROOT_URL=http://localhost:3000/rocketchat
+      - TZ=Asia/Tokyo
+    tty: true
+    networks:
+      - bridge
 
 networks:
-  qass_ci_net:
+  bridge:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.16.237.0/16
 
 volumes:
-  jenkins-data:
-    driver: local
+  ldap-config-data: {}
+  ldap-app-data: {}

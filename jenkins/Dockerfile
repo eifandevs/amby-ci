@@ -1,3 +1,3 @@
-FROM jenkins/jenkins:2.125
+FROM jenkins:2.60.3
 
-LABEL maintainer "eifandevs <eifan.devs@gmail.com>"
+LABEL maintainer "tenma <kk.tenma.iori001@nttd-mse.com>"
