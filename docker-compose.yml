@@ -2,7 +2,7 @@ version: '3.2'
 services:
   nginx:
     build: ./nginx
-    container_name: kimochi-nginx
+    container_name: amby-nginx
     ports:
       - "80:80"
     depends_on:
@@ -15,7 +15,7 @@ services:
 
   ldap:
     build: ldap
-    container_name: kimochi-ldap
+    container_name: amby-ldap
     ports:
       - "389:389"
     environment:
@@ -30,7 +30,7 @@ services:
 
   phpldapadmin:
     build: phpldapadmin
-    container_name: kimochi-phpldapadmin
+    container_name: amby-phpldapadmin
     ports:
       - "3003:80"
     environment:
@@ -40,7 +40,7 @@ services:
 
   portainer:
     build: portainer
-    container_name: kimochi-portainer
+    container_name: amby-portainer
     restart: always
     ports:
       - "3002:9000"
@@ -52,7 +52,7 @@ services:
       
   jenkins:
     build: jenkins
-    container_name: kimochi-jenkins
+    container_name: amby-jenkins
     user: root
     restart: always
     ports:
@@ -69,7 +69,7 @@ services:
 
   db:
     build: rocket.chat/db
-    container_name: kimochi-rocketchat-db
+    container_name: amby-rocketchat-db
     restart: always
     command: --smallfiles
     volumes:
@@ -82,7 +82,7 @@ services:
 
   rocketchat:
     build: rocket.chat/app
-    container_name: kimochi-rocketchat
+    container_name: amby-rocketchat
     depends_on:
       - db
     restart: always

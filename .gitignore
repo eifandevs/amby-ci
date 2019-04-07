@@ -1,1 +1,4 @@
 .env
+/jenkins/home
+/portainer/data
+/rocket.chat/db/data
