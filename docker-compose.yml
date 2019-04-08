@@ -19,12 +19,14 @@ services:
     ports:
       - "389:389"
     environment:
-      - SLAPD_PASSWORD=secret_password
-      - SLAPD_DOMAIN=ldap.service.local
-      - SLAPD_FULL_DOMAIN=dc=ldap,dc=service,dc=local
+      LDAP_ORGANISATION: "Amby Group"
+      LDAP_DOMAIN: "amby.local"
+      LDAP_ADMIN_PASSWORD: "password"
+      LDAP_CONFIG_PASSWORD: "password"
     volumes:
-      - ldap-config-data:/etc/ldap
-      - ldap-app-data:/var/lib/ldap
+      - ./ldap/db:/var/lib/ldap
+      - ./ldap/slapd.d:/etc/ldap/slapd.d
+      - ./ldap/ldif:/ldif
     networks:
       - bridge
 
@@ -34,7 +36,10 @@ services:
     ports:
       - "3003:80"
     environment:
-      - LDAP_SERVER_HOST=ldap
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: "false"
+    depends_on:
+      - ldap
     networks:
       - bridge
 
@@ -99,7 +104,4 @@ services:
 networks:
   bridge:
     driver: bridge
-
-volumes:
-  ldap-config-data: {}
-  ldap-app-data: {}
+    

@@ -1,4 +1,6 @@
 .env
+/ldap/db
+/ldap/slapd.d
 /jenkins/home
 /portainer/data
 /rocket.chat/db/data
