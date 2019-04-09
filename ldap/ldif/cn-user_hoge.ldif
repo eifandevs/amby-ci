@@ -1,0 +1,7 @@
+dn: cn=userhoge,ou=Users,dc=amby,dc=local
+objectClass: inetOrgPerson
+displayName: User Hoge
+sn: User
+givenName: Hoge
+mail: userhoge@amby.local
+userPassword: password

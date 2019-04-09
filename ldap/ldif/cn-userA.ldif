@@ -1,7 +1,0 @@
-dn: cn=userA,ou=Users,dc=amby,dc=local
-objectClass: inetOrgPerson
-displayName: User A
-sn: User
-givenName: A
-mail: usera@amby.local
-userPassword: password
