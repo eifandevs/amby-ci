@@ -4,7 +4,7 @@ services:
     build: ./nginx
     container_name: amby-nginx
     ports:
-      - "80:80"
+      - 80:80
     depends_on:
       - jenkins 
       - portainer
@@ -16,8 +16,8 @@ services:
   ldap:
     build: ldap
     container_name: amby-ldap
-    ports:
-      - "389:389"
+    expose:
+      - 389
     environment:
       LDAP_ORGANISATION: "Amby Group"
       LDAP_DOMAIN: "amby.local"
@@ -33,8 +33,8 @@ services:
   phpldapadmin:
     build: phpldapadmin
     container_name: amby-phpldapadmin
-    ports:
-      - "3003:80"
+    expose:
+      - 80
     environment:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: "false"
@@ -58,11 +58,10 @@ services:
   jenkins:
     build: jenkins
     container_name: amby-jenkins
-    user: root
     restart: always
-    ports:
-      - 3001:8080
-      - 50000:50000
+    expose:
+      - 8080
+      - 50000
     volumes:
       - ./jenkins/home:/var/jenkins_home
     environment:
@@ -91,8 +90,8 @@ services:
     depends_on:
       - db
     restart: always
-    ports:
-      - 3000:3000
+    expose:
+      - 3000
     environment:
       - PORT=3000
       - ROOT_URL=http://localhost:3000/rocketchat
